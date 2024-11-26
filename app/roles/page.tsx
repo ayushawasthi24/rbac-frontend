@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useLoading } from "@/lib/loading-context";
+import { set } from "date-fns";
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -32,16 +34,32 @@ export default function RolesPage() {
     permissions: [],
   });
 
+  const { setIsLoading } = useLoading();
+
   useEffect(() => {
-    api.getRoles().then(setRoles);
-    api.getPermissions().then(setPermissions);
-  }, []);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [roles, permissions] = await Promise.all([
+          api.getRoles(),
+          api.getPermissions(),
+        ]);
+        setRoles(roles);
+        setPermissions(permissions);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [setIsLoading]);
 
   const handleAddRole = async () => {
+    setIsLoading(true);
     const role = await api.createRole(newRole);
     setRoles([...roles, role]);
     setIsAddRoleOpen(false);
     setNewRole({ name: "", permissions: [] });
+    setIsLoading(false);
   };
 
   const handleUpdateRolePermissions = async (
@@ -49,6 +67,7 @@ export default function RolesPage() {
     permissionName: string,
     checked: boolean
   ) => {
+    setIsLoading(true);
     const role = roles.find((r) => r.id === id);
     if (!role) return;
 
@@ -62,11 +81,14 @@ export default function RolesPage() {
         r.id === id ? { ...r, permissions: updatedPermissions } : r
       )
     );
+    setIsLoading(false);
   };
 
   const handleDeleteRole = async (id: string) => {
+    setIsLoading(true);
     await api.deleteRole(id);
     setRoles(roles.filter((role) => role.id !== id));
+    setIsLoading(false);
   };
 
   return (

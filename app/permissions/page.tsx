@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useLoading } from "@/lib/loading-context";
 
 export default function PermissionsPage() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
@@ -29,21 +30,35 @@ export default function PermissionsPage() {
     name: "",
     description: "",
   });
+  const { setIsLoading } = useLoading();
 
   useEffect(() => {
-    api.getPermissions().then(setPermissions);
-  }, []);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const permissions = await api.getPermissions();
+        setPermissions(permissions);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [setIsLoading]);
 
   const handleAddPermission = async () => {
+    setIsLoading(true);
     const permission = await api.createPermission(newPermission);
     setPermissions([...permissions, permission]);
     setIsAddPermissionOpen(false);
     setNewPermission({ name: "", description: "" });
+    setIsLoading(false);
   };
 
   const handleDeletePermission = async (id: string) => {
+    setIsLoading(true);
     await api.deletePermission(id);
     setPermissions(permissions.filter((permission) => permission.id !== id));
+    setIsLoading(false);
   };
 
   return (

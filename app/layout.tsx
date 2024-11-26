@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LoadingProvider } from "@/lib/loading-context";
 import { LoadingIndicator } from "@/components/loading-indicator";
 import { Providers } from "@/components/providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,6 +45,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex min-h-screen flex-col bg-background">
+            <Toaster />
             <Header />
             <div className="flex-1">
               <Providers>

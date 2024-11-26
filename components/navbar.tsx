@@ -59,14 +59,6 @@ export function Navbar() {
               <span>General Settings</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Users className="mr-2 h-4 w-4" />
-            <span>Account</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Bell className="mr-2 h-4 w-4" />
-            <span>Notifications</span>
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>

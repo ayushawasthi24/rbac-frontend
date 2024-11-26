@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/header";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LoadingProvider } from "@/lib/loading-context";
+import { LoadingIndicator } from "@/components/loading-indicator";
+import { Providers } from "@/components/providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -12,6 +18,8 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,9 +34,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={inter.className}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex min-h-screen flex-col bg-background">
+            <Header />
+            <div className="flex-1">
+              <Providers>
+                <LoadingIndicator />
+                {children}
+              </Providers>
+            </div>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

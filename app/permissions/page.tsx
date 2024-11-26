@@ -25,11 +25,15 @@ import { useLoading } from "@/lib/loading-context";
 
 export default function PermissionsPage() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [filteredPermissions, setFilteredPermissions] = useState<Permission[]>(
+    []
+  );
   const [isAddPermissionOpen, setIsAddPermissionOpen] = useState(false);
   const [newPermission, setNewPermission] = useState<Omit<Permission, "id">>({
     name: "",
     description: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
   const { setIsLoading } = useLoading();
 
   useEffect(() => {
@@ -38,12 +42,26 @@ export default function PermissionsPage() {
       try {
         const permissions = await api.getPermissions();
         setPermissions(permissions);
+        setFilteredPermissions(permissions);
       } finally {
         setIsLoading(false);
       }
     };
     fetchData();
   }, [setIsLoading]);
+
+  useEffect(() => {
+    const filtered = permissions.filter((permission) => {
+      const nameMatch = permission.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      return (
+        nameMatch ||
+        permission.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredPermissions(filtered);
+  }, [permissions, searchTerm]);
 
   const handleAddPermission = async () => {
     setIsLoading(true);
@@ -111,6 +129,16 @@ export default function PermissionsPage() {
           </DialogContent>
         </Dialog>
       </div>
+      <div className="mb-6 flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <Input
+            placeholder="Search permissions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
+        </div>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -120,7 +148,7 @@ export default function PermissionsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {permissions.map((permission) => (
+          {filteredPermissions.map((permission) => (
             <TableRow key={permission.id}>
               <TableCell>{permission.name}</TableCell>
               <TableCell>{permission.description}</TableCell>

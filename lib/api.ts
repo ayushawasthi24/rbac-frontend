@@ -1,4 +1,4 @@
-import { User, Role, Permission } from "@/types";
+import { User, Role, Permission, UserActivity } from "@/types";
 
 let users: User[] = [
   {
@@ -119,6 +119,261 @@ let permissions: Permission[] = [
   },
 ];
 
+let userActivities: UserActivity[] = [
+  {
+    id: "a1",
+    user: {
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "created_user",
+    createdAt: "2024-11-01T08:00:00Z",
+    timestamp: 1635792000000,
+    details: "Created a new user account for Jane Smith",
+  },
+  {
+    id: "a2",
+    user: {
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "deleted_user",
+    createdAt: "2024-11-02T09:00:00Z",
+    timestamp: 1635878400000,
+    details: "Deleted user account for Bob Brown",
+  },
+  {
+    id: "a3",
+    user: {
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "updated_role",
+    createdAt: "2024-11-03T10:00:00Z",
+    timestamp: 1635964800000,
+    details: "Updated role of Alice Johnson to 'user'",
+  },
+  {
+    id: "a4",
+    user: {
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "approved_content",
+    createdAt: "2024-11-04T11:00:00Z",
+    timestamp: 1636051200000,
+    details: "Approved content submission from Charlie Davis",
+  },
+  {
+    id: "b1",
+    user: {
+      id: "2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      role: "user",
+      status: "active",
+    },
+    action: "logged_in",
+    createdAt: "2024-11-01T10:00:00Z",
+    timestamp: 1635795600000,
+    details: "Logged into the platform",
+  },
+  {
+    id: "b2",
+    user: {
+      id: "2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      role: "user",
+      status: "active",
+    },
+    action: "updated_profile",
+    createdAt: "2024-11-02T11:00:00Z",
+    timestamp: 1635882000000,
+    details: "Updated profile picture",
+  },
+  {
+    id: "b3",
+    user: {
+      id: "2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      role: "user",
+      status: "active",
+    },
+    action: "commented_on_post",
+    createdAt: "2024-11-03T12:00:00Z",
+    timestamp: 1635968400000,
+    details: "Commented on a post in the 'General Discussion' forum",
+  },
+  {
+    id: "c1",
+    user: {
+      id: "3",
+      name: "Alice Johnson",
+      email: "alice.j@example.com",
+      role: "moderator",
+      status: "inactive",
+    },
+    action: "logged_in",
+    createdAt: "2024-11-01T13:00:00Z",
+    timestamp: 1635802800000,
+    details: "Logged into the platform",
+  },
+  {
+    id: "c2",
+    user: {
+      id: "3",
+      name: "Alice Johnson",
+      email: "alice.j@example.com",
+      role: "moderator",
+      status: "inactive",
+    },
+    action: "approved_content",
+    createdAt: "2024-11-02T14:00:00Z",
+    timestamp: 1635888400000,
+    details: "Approved user-submitted content for publication",
+  },
+  {
+    id: "c3",
+    user: {
+      id: "3",
+      name: "Alice Johnson",
+      email: "alice.j@example.com",
+      role: "moderator",
+      status: "inactive",
+    },
+    action: "banned_user",
+    createdAt: "2024-11-03T15:00:00Z",
+    timestamp: 1635974800000,
+    details: "Banned user George Black for violating community guidelines",
+  },
+  {
+    id: "d1",
+    user: {
+      id: "4",
+      name: "Bob Brown",
+      email: "bob.brown@example.com",
+      role: "guest",
+      status: "active",
+    },
+    action: "logged_in",
+    createdAt: "2024-11-01T16:00:00Z",
+    timestamp: 1635889200000,
+    details: "Logged into the platform as a guest",
+  },
+  {
+    id: "d2",
+    user: {
+      id: "4",
+      name: "Bob Brown",
+      email: "bob.brown@example.com",
+      role: "guest",
+      status: "active",
+    },
+    action: "viewed_content",
+    createdAt: "2024-11-02T17:00:00Z",
+    timestamp: 1635975600000,
+    details: "Viewed content on the 'Public Articles' page",
+  },
+  {
+    id: "e1",
+    user: {
+      id: "5",
+      name: "Charlie Davis",
+      email: "charlie.davis@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "created_content",
+    createdAt: "2024-11-01T18:00:00Z",
+    timestamp: 1635979200000,
+    details: "Created a new article about 'Tech Trends 2024'",
+  },
+  {
+    id: "e2",
+    user: {
+      id: "5",
+      name: "Charlie Davis",
+      email: "charlie.davis@example.com",
+      role: "admin",
+      status: "active",
+    },
+    action: "approved_content",
+    createdAt: "2024-11-02T19:00:00Z",
+    timestamp: 1636065600000,
+    details: "Approved a blog post from Jane Smith",
+  },
+  {
+    id: "f1",
+    user: {
+      id: "6",
+      name: "Diana Wilson",
+      email: "diana.wilson@example.com",
+      role: "user",
+      status: "inactive",
+    },
+    action: "logged_in",
+    createdAt: "2024-11-01T20:00:00Z",
+    timestamp: 1636062000000,
+    details: "Logged into the platform",
+  },
+  {
+    id: "g1",
+    user: {
+      id: "7",
+      name: "Ethan Thomas",
+      email: "ethan.t@example.com",
+      role: "editor",
+      status: "active",
+    },
+    action: "created_content",
+    createdAt: "2024-11-01T21:00:00Z",
+    timestamp: 1636148400000,
+    details: "Created an editorial piece on 'Best Web Development Practices'",
+  },
+  {
+    id: "g2",
+    user: {
+      id: "7",
+      name: "Ethan Thomas",
+      email: "ethan.t@example.com",
+      role: "editor",
+      status: "active",
+    },
+    action: "edited_content",
+    createdAt: "2024-11-02T22:00:00Z",
+    timestamp: 1636234800000,
+    details: "Edited article 'Tech in 2024' for clarity",
+  },
+  {
+    id: "h1",
+    user: {
+      id: "8",
+      name: "Fiona White",
+      email: "fiona.white@example.com",
+      role: "guest",
+      status: "active",
+    },
+    action: "viewed_content",
+    createdAt: "2024-11-01T22:00:00Z",
+    timestamp: 1636238400000,
+    details: "Viewed articles on 'Health and Wellness' section",
+  },
+];
+
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const api = {
@@ -185,4 +440,9 @@ export const api = {
     delay(500).then(() => {
       permissions = permissions.filter((p) => p.id !== id);
     }),
+  getUserActivities: (userId: string) =>
+    delay(500).then(() =>
+      userActivities.filter((activity) => activity.user.id === userId)
+    ),
+  getAllActivities: () => delay(500).then(() => userActivities),
 };

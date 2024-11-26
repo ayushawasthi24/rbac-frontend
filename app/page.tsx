@@ -1,208 +1,69 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import {
-  CalendarIcon,
-  Download,
-  Users,
-  Shield,
-  History,
-  Activity,
-} from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { api } from "@/lib/api";
-import { useLoading } from "@/lib/loading-context";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function Home() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    activeRoles: 0,
-    totalPermissions: 0,
-    auditLogs: 0,
-    activeSessions: 0,
-  });
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const { setIsLoading } = useLoading();
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // For this sample, we'll just log the credentials and redirect to the dashboard
+    console.log("Login attempt with:", { email, password });
+    // In a real app, you would validate the credentials here
+    router.push("/dashboard");
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const [users, roles, permissions] = await Promise.all([
-          api.getUsers(),
-          api.getRoles(),
-          api.getPermissions(),
-        ]);
-        setStats({
-          totalUsers: users.length,
-          activeRoles: roles.length,
-          totalPermissions: permissions.length,
-          auditLogs: 156, // Simulated value
-          activeSessions: 23, // Simulated value
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [setIsLoading]);
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <div className="flex items-center space-x-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[240px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          <Button>
-            <Download className="mr-2 h-4 w-4" />
-            Download
-          </Button>
-        </div>
-      </div>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        </TabsList>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalUsers}</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Roles
-              </CardTitle>
-              <Shield className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.activeRoles}</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Permissions
-              </CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalPermissions}</div>
-              <p className="text-xs text-muted-foreground">
-                +19% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <History className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.activeSessions}</div>
-              <p className="text-xs text-muted-foreground">
-                +201 since last hour
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4">
-            <CardHeader>
-              <CardTitle>Overview</CardTitle>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <div className="space-y-4 m-4">
-                <div className="grid gap-2">
-                  <div className="text-sm font-medium">Recent Activity</div>
-                  {[1, 2, 3, 4, 5].map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-4 rounded-md p-2 hover:bg-accent"
-                    >
-                      <div className="size-2 rounded-full bg-sky-500" />
-                      <div className="flex-1 space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                          New user registered
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          2 minutes ago
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-[350px]">
+        <CardHeader>
+          <h1 className="font-bold text-xl">VRV Security</h1>
+          <CardTitle>Login</CardTitle>
+          <CardDescription>
+            Enter your credentials to access the dashboard.
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleLogin}>
+          <CardContent>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
-            </CardContent>
-          </Card>
-          <Card className="col-span-3">
-            <CardHeader>
-              <CardTitle>Recent Audit Logs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[1, 2, 3].map((_, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">
-                        Permission "delete_user" added to role "admin"
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {i + 1} hour ago
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </Tabs>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   );
 }

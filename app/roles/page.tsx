@@ -23,16 +23,26 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLoading } from "@/lib/loading-context";
-import { set } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
+  const [filteredRoles, setFilteredRoles] = useState<Role[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
   const [newRole, setNewRole] = useState<Omit<Role, "id">>({
     name: "",
     permissions: [],
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [permissionFilter, setPermissionFilter] = useState("all");
 
   const { setIsLoading } = useLoading();
 
@@ -45,6 +55,7 @@ export default function RolesPage() {
           api.getPermissions(),
         ]);
         setRoles(roles);
+        setFilteredRoles(roles);
         setPermissions(permissions);
       } finally {
         setIsLoading(false);
@@ -52,6 +63,19 @@ export default function RolesPage() {
     };
     fetchData();
   }, [setIsLoading]);
+
+  useEffect(() => {
+    const filtered = roles.filter((role) => {
+      const nameMatch = role.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const permissionMatch =
+        permissionFilter === "all" ||
+        role.permissions.includes(permissionFilter);
+      return nameMatch && permissionMatch;
+    });
+    setFilteredRoles(filtered);
+  }, [roles, searchTerm, permissionFilter]);
 
   const handleAddRole = async () => {
     setIsLoading(true);
@@ -162,6 +186,33 @@ export default function RolesPage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <div className="mb-6 flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <Input
+            placeholder="Search roles..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <div className="flex gap-4">
+          <Select value={permissionFilter} onValueChange={setPermissionFilter}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Filter by permission" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Permissions</SelectItem>
+              {permissions.map((permission) => (
+                <SelectItem key={permission.id} value={permission.name}>
+                  {permission.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -171,34 +222,32 @@ export default function RolesPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {roles.map((role) => (
+          {filteredRoles.map((role) => (
             <TableRow key={role.id}>
               <TableCell>{role.name}</TableCell>
               <TableCell>
-                {permissions.map((permission) => (
-                  <div
-                    key={permission.id}
-                    className="flex items-center space-x-2 space-y-2"
-                  >
-                    <Checkbox
-                      id={`role-${role.id}-permission-${permission.id}`}
-                      checked={role.permissions.includes(permission.name)}
-                      onCheckedChange={(checked) =>
+                <div className="flex flex-wrap gap-2">
+                  {permissions.map((permission) => (
+                    <Badge
+                      key={permission.id}
+                      variant={
+                        role.permissions.includes(permission.name)
+                          ? "default"
+                          : "outline"
+                      }
+                      className="cursor-pointer"
+                      onClick={() =>
                         handleUpdateRolePermissions(
                           role.id,
                           permission.name,
-                          checked as boolean
+                          !role.permissions.includes(permission.name)
                         )
                       }
-                    />
-                    <label
-                      htmlFor={`role-${role.id}-permission-${permission.id}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {permission.name}
-                    </label>
-                  </div>
-                ))}
+                    </Badge>
+                  ))}
+                </div>
               </TableCell>
               <TableCell>
                 <Button

@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -116,8 +117,8 @@ export default function RolesPage() {
   };
 
   return (
-    <div className="m-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="m-4 sm:m-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold">Roles Management</h2>
         <Dialog open={isAddRoleOpen} onOpenChange={setIsAddRoleOpen}>
           <DialogTrigger asChild>
@@ -143,11 +144,11 @@ export default function RolesPage() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Permissions</Label>
-                <div className="col-span-3">
+                <ScrollArea className="h-[200px] col-span-3 p-2">
                   {permissions.map((permission) => (
                     <div
                       key={permission.id}
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 mb-2"
                     >
                       <Checkbox
                         id={`permission-${permission.id}`}
@@ -179,7 +180,7 @@ export default function RolesPage() {
                       </label>
                     </div>
                   ))}
-                </div>
+                </ScrollArea>
               </div>
             </div>
             <Button onClick={handleAddRole}>Add Role</Button>
@@ -198,7 +199,7 @@ export default function RolesPage() {
         </div>
         <div className="flex gap-4">
           <Select value={permissionFilter} onValueChange={setPermissionFilter}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Filter by permission" />
             </SelectTrigger>
             <SelectContent>
@@ -213,55 +214,57 @@ export default function RolesPage() {
         </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Permissions</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredRoles.map((role) => (
-            <TableRow key={role.id}>
-              <TableCell>{role.name}</TableCell>
-              <TableCell>
-                <div className="flex flex-wrap gap-2">
-                  {permissions.map((permission) => (
-                    <Badge
-                      key={permission.id}
-                      variant={
-                        role.permissions.includes(permission.name)
-                          ? "default"
-                          : "outline"
-                      }
-                      className="cursor-pointer"
-                      onClick={() =>
-                        handleUpdateRolePermissions(
-                          role.id,
-                          permission.name,
-                          !role.permissions.includes(permission.name)
-                        )
-                      }
-                    >
-                      {permission.name}
-                    </Badge>
-                  ))}
-                </div>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDeleteRole(role.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Permissions</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredRoles.map((role) => (
+              <TableRow key={role.id}>
+                <TableCell>{role.name}</TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-2">
+                    {permissions.map((permission) => (
+                      <Badge
+                        key={permission.id}
+                        variant={
+                          role.permissions.includes(permission.name)
+                            ? "default"
+                            : "outline"
+                        }
+                        className="cursor-pointer mb-1"
+                        onClick={() =>
+                          handleUpdateRolePermissions(
+                            role.id,
+                            permission.name,
+                            !role.permissions.includes(permission.name)
+                          )
+                        }
+                      >
+                        {permission.name}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDeleteRole(role.id)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,10 +13,8 @@ import {
   Users,
   Shield,
   Settings,
-  Bell,
   ChevronDown,
   UserRoundCog,
-  User,
 } from "lucide-react";
 
 const navItems = [
@@ -29,7 +26,7 @@ const navItems = [
 
 export function Navbar() {
   return (
-    <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
+    <nav className="flex flex-col md:flex-row md:items-center md:space-x-4 lg:space-x-6">
       {navItems.map((item, index) => (
         <Link
           key={index}

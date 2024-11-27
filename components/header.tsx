@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "./theme-toggle";
 import { Navbar } from "./navbar";
 import { usePathname } from "next/navigation";
-import { SearchResults } from "./search-results";
+import { SearchResults } from "@/components/search-results";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function Header() {
   const pathname = usePathname();
@@ -36,13 +39,28 @@ export function Header() {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
-        <Navbar />
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <nav className="flex flex-col space-y-4">
+              <Navbar />
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <div className="hidden md:block">
+          <Navbar />
+        </div>
         <div className="ml-auto flex items-center space-x-4">
           <div className="relative">
             <Input
               type="search"
               placeholder="Search..."
-              className="md:w-[200px] lg:w-[300px]"
+              className="w-[200px] sm:w-[300px]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}

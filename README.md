@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Role Based Access Control System
 
-## Getting Started
+Welcome to our Role Based Access Control System! This responsive web application frontend provides comprehensive tools for managing users and roles within your organization. Built with Next.js and React, it offers a seamless, intuitive interface for administrators to handle user data efficiently.
 
-First, run the development server:
+## 🌟 Features
 
+### 💻 Dashboard
+- A clean, intuitive overview of the system's performance and key metrics.
+- Quick links to important actions like managing users, roles, and permissions.
+
+### 👥 User Management
+- View, add, edit, and delete users
+- Search users by name or email
+- Filter users by role and status
+- Export users to CSV
+- Import users from CSV
+- View user activity timeline
+
+### 🔐 Role Management
+- Create and manage custom roles
+- Assign and revoke permissions for each role
+- Filter roles by permissions
+- Search roles by name
+
+### 🔑 Permission Management
+- View what permissions are assigned to each role
+- Add or remove permissions
+- Filter permissions by name
+
+### 🎨 Responsive Design
+- Fully responsive layout that works on desktop, tablet, and mobile devices
+- Adaptive components that adjust to different screen sizes
+
+### 🔒 Security
+- Email validation for adding a new user
+- Secure role-based access control
+
+
+## 🛠 Technologies Used
+
+- Next.js 15 
+- React 19
+- TypeScript
+- Tailwind CSS
+- Vercel for deployment
+
+## 🚀 Getting Started
+
+Follow these steps to get your development environment set up:
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/ayushawasthi24/rbac-frontend.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Navigate to the project directory**
+```bash
+cd rbac-frontend
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Install dependencies Make sure you have `Node.js` and `npm` installed on your machine, then run the following command: (Use `--force` flag if dependency issues arise)**
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Start the development server To run the application locally, use:**
+```bash
+npm run dev
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This will start the Next.js development server, and you can access the app at `http://localhost:3000`.

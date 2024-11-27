@@ -130,15 +130,15 @@ export default function Home() {
   return (
     <>
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
+        <div className="space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant={"outline"}
+                  variant="outline"
                   className={cn(
-                    "w-[240px] justify-start text-left font-normal",
+                    "w-full sm:w-[240px] justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -155,7 +155,7 @@ export default function Home() {
                 />
               </PopoverContent>
             </Popover>
-            <Button onClick={handleDownload}>
+            <Button onClick={handleDownload} className="w-full sm:w-auto">
               <Download className="mr-2 h-4 w-4" />
               Download
             </Button>
@@ -164,7 +164,7 @@ export default function Home() {
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-          </TabsList>   
+          </TabsList>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

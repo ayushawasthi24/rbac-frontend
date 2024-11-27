@@ -34,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExportUsers } from "@/components/export-users";
 import { ImportUsers } from "@/components/import-users";
 import { UserActivityTimeline } from "@/components/user-activity-timeline";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function UsersPage() {
   const { isLoading, setIsLoading } = useLoading();
@@ -144,10 +145,10 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="m-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="m-4 sm:m-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold">Users Management</h2>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <ExportUsers users={users} />
           <ImportUsers onImport={handleImportUsers} />
           <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
@@ -223,9 +224,9 @@ export default function UsersPage() {
             className="w-full"
           />
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by role" />
             </SelectTrigger>
             <SelectContent>
@@ -238,7 +239,7 @@ export default function UsersPage() {
             </SelectContent>
           </Select>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
@@ -250,70 +251,73 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Activity</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredUsers.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>
-                <Badge
-                  variant={user.status === "active" ? "outline" : "secondary"}
-                  className={`${
-                    user.status === "active"
-                      ? "border-green-500 text-green-500"
-                      : "border-red-500 text-red-500"
-                  }`}
-                >
-                  {user.status}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSelectedUser(user)}
-                >
-                  View Activity
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    handleUpdateUserStatus(
-                      user.id,
-                      user.status === "active" ? "inactive" : "active"
-                    )
-                  }
-                  className="mr-2"
-                >
-                  {user.status === "active" ? "Deactivate" : "Activate"}
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDeleteUser(user.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="min-w-[100px]">Name</TableHead>
+              <TableHead className="min-w-[150px]">Email</TableHead>
+              <TableHead className="min-w-[100px]">Role</TableHead>
+              <TableHead className="min-w-[100px]">Status</TableHead>
+              <TableHead className="min-w-[100px]">Activity</TableHead>
+              <TableHead className="min-w-[200px]">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredUsers.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell className="font-medium">{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={user.status === "active" ? "outline" : "secondary"}
+                    className={`${
+                      user.status === "active"
+                        ? "border-green-500 text-green-500"
+                        : "border-red-500 text-red-500"
+                    }`}
+                  >
+                    {user.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    View Activity
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        handleUpdateUserStatus(
+                          user.id,
+                          user.status === "active" ? "inactive" : "active"
+                        )
+                      }
+                    >
+                      {user.status === "active" ? "Deactivate" : "Activate"}
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {selectedUser && (
         <UserActivityTimeline

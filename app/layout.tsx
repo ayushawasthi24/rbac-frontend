@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LoadingProvider } from "@/lib/loading-context";
 import { LoadingIndicator } from "@/components/loading-indicator";
@@ -62,6 +63,7 @@ export default function RootLayout({
                 {children}
               </Providers>
             </div>
+            <Footer />
           </div>
         </ThemeProvider>
       </body>

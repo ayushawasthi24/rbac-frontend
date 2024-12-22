@@ -24,7 +24,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-[350px]">
         <CardHeader>
-          <h1 className="font-bold text-xl">VRV Security</h1>
+          <h1 className="font-bold text-xl">RBAC Frontend</h1>
           <CardTitle>Login</CardTitle>
           <CardDescription>
             Enter your credentials to access the dashboard.
